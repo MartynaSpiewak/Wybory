@@ -1,16 +1,19 @@
 #'  Funkcja \code{facebook_like_najlepszy_wynik} dla wszystkich z kandydatow zwraca 
 #'  najwyzsza odnotowana liczbe polubien ze wszystkich dostepnych stron na facebook.com
 #' 
-#' @usage facebook_like_najlepszy_wynik (when=Sys.Date())
+#' @usage facebook_like_najlepszy_wynik (when=Sys.Date(), frame_likes = frame_likes, can = can)
 #' @param when - dzien, dla ktorego porownujemy liczbe lajkow dla kazdego kandydata
-#'
+#' @param frame_likes - ramka wejsciowa z liczba lajkow danego dnia dla wszystkich stron 
+#' na temat kandydatow
+#' @param can - ramka danych z podstawowymi informacjami o kandydatach - id, imie, nazwisko
+#
 #' @return
 #' funkcja zwraca ramke danych: pierwsza kolumna to imię i nazwisko kandydata, druga to
 #' najwyzsza liczba polubien danego dnia
 #' 
 #' @details
 #' Na podstawie zwracanej ramki danych mozemy narysowac szereg czasowy:
-#' res <- facebook_like_najlepszy_wynik(as.Date("2015-05-01"))
+#' res <- facebook_like_najlepszy_wynik(as.Date("2015-03-16"), frame_likes = frame_likes, can = can)
 #' ggplot(res, aes(x = factor(name), y = likes)) + geom_bar(stat = "identity") 
 #'
 #'@author Martyna Spiewak
@@ -20,9 +23,15 @@
 #' dplyr
 
 #'@examples
-#' facebook_like_najlepszy_wynik("2015-05-10")
+#' facebook_like_najlepszy_wynik("2015-02-10",frame_likes = frame_likes, can = can)
+#' 
+#' należy wczytać ramke danych z podsumowanie liczby lajkow, np:
+#'  dir <- "Facebook\\Likes\\Podsumowanie\\Podsumowanie.csv"
+#   frame_likes <- read.table(dir, sep=";", header = TRUE)
 
-facebook_like_najlepszy_wynik <- function(when=Sys.Date()){
+
+facebook_like_najlepszy_wynik <- function(when=Sys.Date(), frame_likes = frame_likes, can = can){
+  stopifnot(when >= as.Date("2015-03-16"))
   
   dir <- "Facebook\\Likes\\Podsumowanie\\Podsumowanie.csv"
   df <- read.table(dir, sep=";", header = TRUE)

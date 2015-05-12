@@ -8,6 +8,9 @@
 #' @param name_can - imie i nazwisko kandydata 
 #' @param from - data, od ktorej rozpoczynamy analize
 #' @param to - data, do której prowadzimy analize
+#' @param frame_posts - ramka wejsciowa ze wszystkimi postami ukazanymi sie na publicznych 
+#' profilach kandydatow od 2015-01-01
+#' @param can - ramka danych z podstawowymi informacjami o kandydatach - id, imie, nazwisko
 #'
 #' @details
 #' Imię i nazwisko \code{name_can} mozemy wybrać ze zbioru:
@@ -35,20 +38,22 @@
 #' RColorBrewer
 #' 
 #'@examples
-#' facebook_wordcloud("Bronislaw Komorowski")
+#' facebook_wordcloud("Bronislaw Komorowski", frame_posts = frame_posts, can = can)
 
-facebook_wordcloud <- function(name_can, from = as.Date('2015-01-01'), to = Sys.Date()){
+facebook_wordcloud <- function(name_can, from=as.Date("2015-01-01"), to=Sys.Date(),
+                                frame_posts, can){
   
-  # wczytujemy ramke z wszystkimi postami opublikowanymi od daty '2015-01-01':
-  kandydaci <- read.table("Facebook\\facebook_posts.csv", sep =";", h = T)
-  # tableka inforamacyjna, w ktorej sa imiona i nazwiska wszystkich kandydatow i id
-  df_read <- read.table("Facebook\\kandydaci.csv", h = T)
-  kan <- stri_trans_totitle(df_read$names)
+#   # wczytujemy ramke z wszystkimi postami opublikowanymi od daty '2015-01-01':
+#   kandydaci <- read.table("Facebook\\facebook_posts.csv", sep =";", h = T)
+#   # tableka inforamacyjna, w ktorej sa imiona i nazwiska wszystkich kandydatow i id
+#   df_read <- read.table("Facebook\\kandydaci.csv", h = T)
   
-  # id wybranego kandydata
-  id <- df_read$id[which(kan == name_can)]
+  kan <- stri_trans_totitle(can$names)
+  
+  # id wybranego/ych kandydata/ow
+  id <- can$id[which(kan %in% name_can)]
   # ograniczamy sie do rekordow o danych kandydacie
-  one <- kandydaci[kandydaci$id == id,]
+  one <- frame_posts[frame_posts$id == id,]
   # zmiana formatu daty
   one$created_time <- stri_extract_first_regex(one$created_time, ".{10}")
   # posty z danego odcinka czasowego
@@ -101,11 +106,11 @@ oczyszczanie <- function(tresci){
 }
 
 # Przykład dla Emilki: 
-# wc <- wordcloud_facebook("Janusz Korwin Mikke")
+# wc <- facebook_wordcloud("Janusz Korwin Mikke", frame_posts = frame_posts, can = can)
 # 
 #   #wordcloud
 #   wordcloud(names(top500),top500,c(8,.3),2,,FALSE,TRUE,.15,pal)
 #   wordcloud(names(wc), wc, scale=c(4,0.5), random.order=FALSE,
 #               min.freq = 1, max.words=500,
 #               colors=brewer.pal(7, "Dark2"))
-# 
+
