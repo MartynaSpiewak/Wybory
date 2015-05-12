@@ -7,6 +7,9 @@
 #'
 #' @param frame ramka danych, w której zawarty jest wskaŸnik sentymentu dla kandydatów
 #' @param name wektor napisów, zawieraj¹cy nazwiska kandydatów
+#' @param begin poczatek analizy
+#' @param end koniec analizy
+#' @param thickness grubisc linii
 #'
 #'
 #'@details
@@ -16,8 +19,8 @@
 #' "Jacek Wilk", "Grzegorz Braun", "Pawel Tanajno"
 #' 
 #' @examples
-#' sentiment_graph(frame,c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"))
-#' sentiment_graph(frame,name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"), begin="2015-03-01", end="2015-05-01")
+#' sentiment_graph(read.csv2("Podsumowanie_tweetow.csv"),c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"))
+#' sentiment_graph(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"), begin="2015-03-01", end="2015-05-01")
 #'
 #' @import dplyr
 #' @import stringi
