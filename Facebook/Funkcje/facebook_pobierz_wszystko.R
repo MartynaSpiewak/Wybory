@@ -1,10 +1,10 @@
 #' Sciaganie informacji z facebook.com
 #'
-#' Funkcja \code{facebook_sciagnij_mnie} ma na celu sciagniecie informacji na temat 
+#' Funkcja \code{facebook_pobierz_wszystko} ma na celu sciagniecie informacji na temat 
 #' postow, komentarzy pod postami (dane z ostatnich 7 dni) 
 #' oraz liczby lajkow na temat wszystkich kandydatow na prezydenta - w dniu sciagania
 #' 
-#' @usage facebook_sciagnij_mnie <- function(fb_oauth)
+#' @usage facebook_pobierz_wszystko(fb_oauth)
 #' @param fb_oauth - sciezka do pliku w ktorym znajduje sie "klucz dostepu" do facebooka
 #'
 #' @return
@@ -18,11 +18,11 @@
 #' Rfacebook
 
 #'@examples
-#' facebook_sciagnij_mnie()
+#' facebook_pobierz_wszystko()
 #' 
 
 
-facebook_sciagnij_mnie <- function(fb_oauth){
+facebook_pobierz_wszystko <- function(fb_oauth){
   #load(file.path("C:\\Users\\MARTYNKA\\Documents", "fb_oauth"))
   
   # podstawowe informacje na temat kandydatow,na podstawie ktorych sciagami dane
@@ -31,9 +31,9 @@ facebook_sciagnij_mnie <- function(fb_oauth){
   names(id_kandydant_all) <- df_read$names
   
   # posty i komentarze
-  for(i in 1:ll) facebook_posts_comments(id.kandydant.all[i])
+  for(i in 1:ll) facebook_posty_komentarze_pobieranie(id.kandydant.all[i])
   # lajki
-  for(i in 1:ll) facebook.likes(id.kandydant.all[i])
+  for(i in 1:ll) facebook.likes_pobieranie(id.kandydant.all[i])
 }
   
   
