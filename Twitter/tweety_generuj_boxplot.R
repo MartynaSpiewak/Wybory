@@ -3,8 +3,8 @@
 #' Funkcja \code{tweety_generuj_boxplot} pobiera dane
 #' z ramki danych dla wybranych kandydatow i tworzy wykresy typu boxplot
 #'
-#' @param frame ramka danych, w której zawarte sa wysokosci wskaznikow dla kandydatow :"Podsumowanie_nasluch_kandydatow.csv"
-#' @param name wektor napisów, zawieraj¹cy nazwisko kandydata
+#' @param frame ramka danych, w kt?rej zawarte sa wysokosci wskaznikow dla kandydatow :"Podsumowanie_nasluch_kandydatow.csv"
+#' @param name wektor napis?w, zawieraj?cy nazwisko kandydata
 #' @param begin poczatek analizy, format YYYY-MM-DD
 #' @param end koniec analizy, format YYYY-MM-DD
 #'
@@ -132,7 +132,6 @@ tweety_generuj_boxplot<- function(frame, name, type,begin="2014-01-01", end=as.c
   
   p <- ggplot(frame_help, aes(x=kandydat, y=y)) + xlab("")+
     ylab(type)+
-    theme(panel.background = element_rect(colour = "black"))+
     theme(plot.title = element_text(lineheight=.8, face="bold",size=16))+
     labs(title = main_title)
 

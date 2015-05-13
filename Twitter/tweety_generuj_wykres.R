@@ -1,12 +1,12 @@
-#' Funkcja tworzy wykres przedstawiaj¹cy zmianê pewnych wartosci wskaznikow na przestrzeni czasu dla okreslonych 
+#' Funkcja tworzy wykres przedstawiaj?cy zmian? pewnych wartosci wskaznikow na przestrzeni czasu dla okreslonych 
 #' kandydatow
 #'
 #' Funkcja \code{tweety_generuj_wykres} pobiera dane
 #' z ramki danych dla wybranego kandydata i w podanym przedziale czasowym tworzy wykres zmiany
 #' wybranego wskaznika w czasie
 #'
-#' @param frame ramka danych, w której zawarte sa wysokosci wskaznikow dla kandydatow :"Podsumowanie_nasluch_kandydatow.csv"
-#' @param name wektor napisów, zawieraj¹cy nazwisko kandydata
+#' @param frame ramka danych, w kt?rej zawarte sa wysokosci wskaznikow dla kandydatow :"Podsumowanie_nasluch_kandydatow.csv"
+#' @param name wektor napis?w, zawieraj?cy nazwisko kandydata
 #' @param begin poczatek analizy, format YYYY-MM-DD
 #' @param end koniec analizy, format YYYY-MM-DD
 #' @param size rozmiar czcionki
@@ -122,7 +122,6 @@ tweety_generuj_wykres <- function(frame, name, type,begin="NA", end="NA",size=12
   
   p <- ggplot(frame_help, aes(x=dates_as_dates, y=y, group=3)) + xlab("")+
     ylab(type)+scale_x_date(labels=date_format("%b-%Y"))+
-    theme(panel.background = element_rect(colour = "black"))+
     theme(plot.title = element_text(colour = "black"))+
     labs(title = main_title)+
     theme(axis.text=element_text(size=size-2),
