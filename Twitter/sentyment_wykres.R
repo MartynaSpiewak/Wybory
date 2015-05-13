@@ -51,7 +51,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
   }
   
   
-  main_title <- "Analiza sentymentu dla wybranych kandydat?w"
+  main_title <- "Analiza sentymentu dla wybranych kandydatow"
   n_days <- as.numeric(end-begin)+1
   
   #generujemy CALY przedzial czasowy
