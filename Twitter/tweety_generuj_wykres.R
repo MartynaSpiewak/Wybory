@@ -7,8 +7,8 @@
 #'
 #' @param frame ramka danych, w której zawarte sa wysokosci wskaznikow dla kandydatow :"Podsumowanie_nasluch_kandydatow.csv"
 #' @param name wektor napisów, zawieraj¹cy nazwisko kandydata
-#' @param begin poczatek analizy
-#' @param end koniec analizy
+#' @param begin poczatek analizy, format YYYY-MM-DD
+#' @param end koniec analizy, format YYYY-MM-DD
 #' @param size rozmiar czcionki
 #'
 #'
@@ -16,14 +16,15 @@
 #' Imie i nazwisko \code{name_can} mozemy wybrac ze zbioru:
 #' "Bronislaw Komorowski", "Andrzej Duda", "Magdalena Ogorek", "Pawel Kukiz"          
 #' "Adam Jarubas", "Janusz Korwin Mikke",  "Janusz Palikot", "Marian Kowalski"      
-#' "Jacek Wilk", "Grzegorz Braun", "Pawel Tanajno"
+#' "Wanda Nowicka'
 #' 
-#' Typ wykresu mozemy wybrac ze zbioru: "srednio retweetow", "suma retweetow", "srednio likeow",
-#' "suma likeow"
+#' Typ wykresu mozemy wybrac ze zbioru: "srednio retweetow", "suma retweetow", "srednio like",
+#' "suma like","liczba tweetow"
 #' 
 #' @examples
 #' frame<-read.csv2("Podsumowanie_nasluch_kandydatow.csv")
-#' tweety_generuj_wykres(frame=frame,name="Bronislaw Komorowski",type="srednio likeow",end="2015-05-02")
+#' tweety_generuj_wykres(frame=frame,name="Bronislaw Komorowski",type="srednio like",end="2015-05-02")
+#' tweety_generuj_wykres(frame=frame,name="Bronislaw Komorowski",type="liczba tweetow",end="2015-05-02")
 #'
 #' @import dplyr
 #' @import stringi
@@ -34,6 +35,7 @@
 
 tweety_generuj_wykres <- function(frame, name, type,begin="NA", end="NA",size=12){
   
+  #konwersja nazw
   nazwy <- c("Komorowski", "AndrzejDuda", "JkmMikke", "ogorekmagda", "JarubasAdam", "PrezydentKukiz", "Palikot_Janusz",
              "M_Kowalski1", "WandaNowicka")
   names(nazwy) <- c("Bronislaw Komorowski", "Andrzej Duda", "Janusz Korwin Mikke",
@@ -41,7 +43,7 @@ tweety_generuj_wykres <- function(frame, name, type,begin="NA", end="NA",size=12
                     "Marian Kowalski", "Wanda Nowicka")
   
   action <- c("mean_retweet","sum_retweet","mean_like","sum_like","how_many_tweets")
-  names(action) <- c("srednio retweetow", "suma retweetow", "srednio likeow","suma likeow","liczba tweetow")
+  names(action) <- c("srednio retweetow", "suma retweetow", "srednio like","suma like","liczba tweetow")
   
   
   ktore <- which(names(nazwy)%in%name)
@@ -54,8 +56,6 @@ tweety_generuj_wykres <- function(frame, name, type,begin="NA", end="NA",size=12
     print("Zly typ")
     return(invisible(NULL))
   }
-  
-  n_plots <- length(name)
   
   
   #tworzymy przedzial czasu, na ktorym bedziemy operowac:
@@ -123,7 +123,7 @@ tweety_generuj_wykres <- function(frame, name, type,begin="NA", end="NA",size=12
   p <- ggplot(frame_help, aes(x=dates_as_dates, y=y, group=3)) + xlab("")+
     ylab(type)+scale_x_date(labels=date_format("%b-%Y"))+
     theme(panel.background = element_rect(colour = "black"))+
-    theme(plot.title = element_text(colour = "red"))+
+    theme(plot.title = element_text(colour = "black"))+
     labs(title = main_title)+
     theme(axis.text=element_text(size=size-2),
           axis.title=element_text(size=size+4,face="bold"))+
