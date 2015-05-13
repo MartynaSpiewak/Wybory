@@ -79,7 +79,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
       if(length(k)>0&&!is.na(k)){
         y[i] <- exact_data[k,3]
         
-      } else y[i] <- NA 
+      } else y[i] <- 0
     }
     
     dates_as_dates <- as.Date(all_dates)
@@ -94,8 +94,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
   
   p <- ggplot(frame_help, aes(x=dates_as_dates, y=y, colour=kandydat)) + xlab("")+
     ylab("sentiment")+xlab("time")+scale_x_date(labels=date_format("%b-%Y"))+
-    theme(panel.background = element_rect(colour = "black"))+
-    theme(plot.title = element_text(colour = "red"))+
+    theme(plot.title = element_text(colour = "black"))+
     theme(axis.text=element_text(size=12),
           axis.title=element_text(size=16,face="bold"))+
     theme(plot.title = element_text(lineheight=.8, face="bold",size=20))+
