@@ -33,8 +33,7 @@
 facebook_like_najlepszy_wynik <- function(when=Sys.Date(), frame_likes = frame_likes, can = can){
   stopifnot(when >= as.Date("2015-03-16"))
   
-  dir <- "Facebook\\Likes\\Podsumowanie\\Podsumowanie.csv"
-  df <- read.table(dir, sep=";", header = TRUE)
+  df <- frame_likes
   
   # zmiana formatu daty
   colnames(df)[5:ncol(df)] <- colnames(df)[5:ncol(df)] %>% 
@@ -73,3 +72,4 @@ facebook_like_najlepszy_wynik <- function(when=Sys.Date(), frame_likes = frame_l
   res <- data.frame(name = names, likes = res)
   return(res) 
 }
+

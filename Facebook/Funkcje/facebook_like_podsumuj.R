@@ -1,4 +1,4 @@
-#' Podsumowanie dla wszystkich kandydata liczby lajków dla każdej ze stron
+#' Podsumowanie dla wszystkich kandydata liczby lajkow dla kazdej ze stron
 #'
 #' Funkcja \code{facebook_like_podsumuj} ma na celu podsumowanie dzienne liczby 
 #' polubien dla kazdego kandydata na prezydenta w jednym pliku .csv

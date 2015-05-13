@@ -54,16 +54,20 @@
 #' dplyr
 #' 
 #'@examples
-#' facebook_post_ile_dziennie(c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz"), 
-#'                              frame_posts = frame_posts, can = can)
+# facebook_post_ile_dziennie(c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz"), 
+#                              frame_posts = frame_posts, can = can)
+#' potrzebujemy dwoch ramek danych, np:
+#' frame_posts <- read.table("Facebook\\Posty\\facebook_posts.csv", sep =";", h = T)
+#  # tableka inforamacyjna, w ktorej sa imiona i nazwiska wszystkich kandydatow i id
+#  can <- read.table("Facebook\\kandydaci.csv", h = T)
 
 ########################
-# skasować
-
-require(dplyr)
-require(stringi)
-require(ggplot2)
-require(data.table)
+# # skasować
+# 
+# require(dplyr)
+# require(stringi)
+# require(ggplot2)
+# require(data.table)
 
 #   wczytujemy ramke z wszystkimi postami opublikowanymi od daty '2015-01-01':
 #   frame_posts <- read.table("Facebook\\Posty\\facebook_posts.csv", sep =";", h = T)
@@ -110,24 +114,24 @@ facebook_post_ile_dziennie <- function(name_can,
 }
 
 
-# Przyklad dla Emilki do Shiny:
-res <- facebook_post_ile_dziennie(c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz"), 
-                                        frame_posts = frame_posts, can = can)
-
-  # wykresy 
-    p1 <- ggplot(res, aes(x=date, y=posts_count, colour=name)) +
-      geom_line(size = 1) + theme(legend.position="bottom") + 
-      ggtitle("Count of posts per day")
-    p2 <- ggplot(tmp_posts, aes(x=date, y=likes_count, colour=name)) +
-      geom_line(size = 1) + theme(legend.position="bottom") + 
-      ggtitle("Count of likes per day")
-    p3 <- ggplot(tmp_posts, aes(x=date, y=comments_count, colour=name)) +
-      geom_line(size = 1) + theme(legend.position="bottom") + 
-      ggtitle("Count of comments per day")
-    p4 <- ggplot(tmp_posts, aes(x=date, y=shares_count, colour=name)) +
-      geom_line(size = 1) + theme(legend.position="bottom") + 
-      ggtitle("Count of shares per day") 
-    multiplot(p1, p2, p3, p4, cols=2)
+# # Przyklad dla Emilki do Shiny:
+# res <- facebook_post_ile_dziennie(c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz"), 
+#                                         frame_posts = frame_posts, can = can)
+# 
+#   # wykresy 
+#     p1 <- ggplot(res, aes(x=date, y=posts_count, colour=name)) +
+#       geom_line(size = 1) + theme(legend.position="bottom") + 
+#       ggtitle("Count of posts per day")
+#     p2 <- ggplot(tmp_posts, aes(x=date, y=likes_count, colour=name)) +
+#       geom_line(size = 1) + theme(legend.position="bottom") + 
+#       ggtitle("Count of likes per day")
+#     p3 <- ggplot(tmp_posts, aes(x=date, y=comments_count, colour=name)) +
+#       geom_line(size = 1) + theme(legend.position="bottom") + 
+#       ggtitle("Count of comments per day")
+#     p4 <- ggplot(tmp_posts, aes(x=date, y=shares_count, colour=name)) +
+#       geom_line(size = 1) + theme(legend.position="bottom") + 
+#       ggtitle("Count of shares per day") 
+#     multiplot(p1, p2, p3, p4, cols=2)
 
 
 
