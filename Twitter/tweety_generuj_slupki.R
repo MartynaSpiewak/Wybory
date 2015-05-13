@@ -15,7 +15,7 @@
 #' Imie i nazwisko \code{name} mozemy wybrac ze zbioru:
 #' "Bronislaw Komorowski", "Andrzej Duda", "Magdalena Ogorek", "Pawel Kukiz"          
 #' "Adam Jarubas", "Janusz Korwin Mikke",  "Janusz Palikot", "Marian Kowalski"      
-#' "Jacek Wilk", "Grzegorz Braun", "Pawel Tanajno"
+#' "Wanda Nowicka"
 #' 
 #' Typ wykresu mozemy wybrac ze zbioru: "srednio retweetow", "suma retweetow", "srednio likeow",
 #' "suma likeow", "liczba tweetow"
@@ -35,7 +35,7 @@
 
 tweety_generuj_slupki<- function(frame, name, type, begin="2014-01-01", end=as.character(Sys.Date())){
   
-  
+  #konwersja nazw
   nazwy <- c("Komorowski", "AndrzejDuda", "JkmMikke", "ogorekmagda", "JarubasAdam", "PrezydentKukiz", "Palikot_Janusz",
              "M_Kowalski1", "WandaNowicka")
   names(nazwy) <- c("Bronislaw Komorowski", "Andrzej Duda", "Janusz Korwin Mikke",
@@ -86,7 +86,7 @@ tweety_generuj_slupki<- function(frame, name, type, begin="2014-01-01", end=as.c
   
   frame[,which_col]<- as.numeric(as.character(frame[,which_col]))
   
-  
+  #generujemy ramke danych z wartosciami
   frame_help <- data.frame()
     
   for(j in 1:n_plots){

@@ -1,14 +1,14 @@
 #' Funkcja tworzy wykres przedstawiaj¹cy zmianê sentymentu kandydatów na prezydenta w czasie.
 #'
-#' Funkcja \code{sentiment_graph(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1)} pobiera dane
+#' Funkcja \code{sentyment_wykres(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1)} pobiera dane
 #' z ramki danych dla wybranych kandydatów i w podanym przedziale czasowym tworzy wykres zmiany
 #' sentymentu w czasie
 #'
 #'
 #' @param frame ramka danych, w której zawarty jest wskaŸnik sentymentu dla kandydatów
 #' @param name wektor napisów, zawieraj¹cy nazwiska kandydatów
-#' @param begin poczatek analizy
-#' @param end koniec analizy
+#' @param begin poczatek analizy, format YYYY-MM-DD
+#' @param end koniec analizy, format YYYY-MM-DD
 #' @param thickness grubisc linii
 #'
 #'
@@ -19,8 +19,8 @@
 #' "Jacek Wilk", "Grzegorz Braun", "Pawel Tanajno"
 #' 
 #' @examples
-#' sentiment_graph(read.csv2("Podsumowanie_tweetow.csv"),c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"))
-#' sentiment_graph(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"), begin="2015-03-01", end="2015-05-01")
+#' sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"))
+#' sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"), begin="2015-03-01", end="2015-05-01")
 #'
 #' @import dplyr
 #' @import stringi
@@ -30,19 +30,15 @@
 #' @author Emilia Momotko
 
 
-sentiment_graph <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1){
+sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1){
   
-  
+  #konwersja nazw
   nazwy <- c("komorowski", "duda", "korwin", "ogorek", "jarubas", "kukiz", "palikot",
              "wilk","braun", "kowalski", "tanajno")
   names(nazwy) <- c("Bronislaw Komorowski", "Andrzej Duda", "Janusz Korwin Mikke",
                     "Magdalena Ogorek", "Adam Jarubas", "Pawel Kukiz","Janusz Palikot",
                     "Jacek Wilk", "Grzegorz Braun", "Marian Kowalski", "Pawel Tanajno")
   
-  library(stringi)
-  library(dplyr)
-  library(ggplot2)
-  library(scales)
   
   ktore <- which(names(nazwy)%in%name)
   name <- nazwy[ktore]
@@ -66,6 +62,8 @@ sentiment_graph <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thick
     all_dates[i] <- as.character(begin+i-1)
   }
   
+  #geeruemy ramke danych z wartosciami, potrzebne jak np nei bylo ktoregos dnia info,
+  #dane nie sa na tyle duze zebysmy mueisli to zapisywac do pliku a nie generowac teraz
   frame_help <- data.frame()
   
   for(j in 1:n_plots){
