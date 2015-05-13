@@ -1,14 +1,19 @@
-###########################################
-### funkcja: sentyment()
-### argumenty wejsciowe: 
-### x - wektor, lista lub ramka danych z 
-### trescia twittera lub komentarzem z facebooka
-### opis:
-### funkcja wraca dla kazdej wzmianki roznice
-### miedzy liczba slow pozytywnych a liczba 
-### slow negatywnych w kazdym wpisie z twittera 
-### lub facebooka
-###########################################
+#' wyznaczenie wartosci analizy sentymentu
+#'
+#' Funkcja \code{sentyment} dokonuje bezposrednio analizy sentymentu dla danychz z twittera
+#' lub facebooka, wyznacza roznice meiszy iloscia slow pozytywnych i negatywnych
+#' 
+#' @usage sentyment(x)
+#' @param x wektor, lista lub ramka danych z trescia twittera lub komentarzem z facebooka
+#' 
+#' @return wektor wartosci sentymentu dla poszczegolnych tweetow
+#'
+#'@author Emilia Momotko
+
+#' 
+#'@examples
+#'x <- c("Ala ma kota", "A kot lubi Ale")
+#' sentyment(x)
 
 sentyment <- function(x){
   
