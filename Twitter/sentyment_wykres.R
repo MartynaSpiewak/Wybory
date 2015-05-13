@@ -1,12 +1,12 @@
-#' Funkcja tworzy wykres przedstawiaj¹cy zmianê sentymentu kandydatów na prezydenta w czasie.
+#' Funkcja tworzy wykres przedstawiaj?cy zmian? sentymentu kandydat?w na prezydenta w czasie.
 #'
 #' Funkcja \code{sentyment_wykres(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1)} pobiera dane
-#' z ramki danych dla wybranych kandydatów i w podanym przedziale czasowym tworzy wykres zmiany
+#' z ramki danych dla wybranych kandydat?w i w podanym przedziale czasowym tworzy wykres zmiany
 #' sentymentu w czasie
 #'
 #'
-#' @param frame ramka danych, w której zawarty jest wskaŸnik sentymentu dla kandydatów
-#' @param name wektor napisów, zawieraj¹cy nazwiska kandydatów
+#' @param frame ramka danych, w kt?rej zawarty jest wska?nik sentymentu dla kandydat?w
+#' @param name wektor napisow, zawieraj?cy nazwiska kandydat?w
 #' @param begin poczatek analizy, format YYYY-MM-DD
 #' @param end koniec analizy, format YYYY-MM-DD
 #' @param thickness grubisc linii
@@ -51,7 +51,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
   }
   
   
-  main_title <- "Analiza sentymentu dla wybranych kandydatów"
+  main_title <- "Analiza sentymentu dla wybranych kandydat?w"
   n_days <- as.numeric(end-begin)+1
   
   #generujemy CALY przedzial czasowy
@@ -77,7 +77,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
       
       k <- which(exact_data$date==all_dates[i])
       if(length(k)>0&&!is.na(k)){
-        y[i] <- exact_data[k,3]
+        y[i] <- exact_data[k[1],3]
         
       } else y[i] <- 0
     }
@@ -107,4 +107,4 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
 }
 
 
-
+sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek","Janusz Korwin Mikke","Janusz Palikot","Marian Kowalski","Adam Jarubas"), begin="2014-03-01", end="2015-05-01")
