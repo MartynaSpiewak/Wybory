@@ -51,7 +51,7 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
   }
   
   
-  main_title <- "Analiza sentymentu dla wybranych kandydat?w"
+  main_title <- "Analiza sentymentu dla wybranych kandydatow"
   n_days <- as.numeric(end-begin)+1
   
   #generujemy CALY przedzial czasowy
@@ -107,4 +107,4 @@ sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thic
 }
 
 
-sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek","Janusz Korwin Mikke","Janusz Palikot","Marian Kowalski","Adam Jarubas"), begin="2014-03-01", end="2015-05-01")
+#sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek","Janusz Korwin Mikke","Janusz Palikot","Marian Kowalski","Adam Jarubas"), begin="2014-03-01", end="2015-05-01")

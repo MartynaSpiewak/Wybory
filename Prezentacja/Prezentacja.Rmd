@@ -1,0 +1,244 @@
+<center> <h1> <font color='darkred'> WYBORY - Podsumowanie </font> </h1> </center>
+
+<center> <h4> Emilia Momotko, Paweł Grabowski, Martyna Śpiewak </h4></center>
+
+```{r setup, echo=FALSE,message=FALSE}
+library(stringi)
+library(dplyr)
+library(data.table)
+library(wordcloud)
+library(ggplot2)
+library(gridExtra)
+library(scales)
+library(Hmisc)
+```
+
+```{r, echo=FALSE}
+# TWITTER
+frame_twitter <- read.csv2("Twitter//dane//Podsumowanie_tweetow.csv")
+frame_twitter_nasluch <- frame<-read.csv2("Twitter//dane//Podsumowanie_nasluch_kandydatow.csv")
+frame_twitter_nasluch_msc <- read.csv2("Twitter//dane//Podsumowanie_nasluch_kandydatow_miesiace.csv")
+
+# FACEBOOK
+# podsumowanie postow
+frame_posts <- read.table("Facebook\\Posty\\facebook_posts.csv", sep =";", h = T)
+# tableka inforamacyjna, w ktorej sa imiona i nazwiska wszystkich kandydatow i id
+can <- read.table("Facebook\\kandydaci.csv", h = T)
+
+# podsumowanie likow
+frame_likes <- read.table("Facebook\\Likes\\Podsumowanie\\Podsumowanie.csv", 
+                          sep=";", header = TRUE)
+last_date <-as.Date(stri_replace_all_regex(
+              stri_extract_first_regex(
+                colnames(frame_likes)[ncol(frame_likes)], "(?<=X).+"), "\\.", "-"))
+
+```
+
+## <font color='darkred'>Źródła</font>
+
+
+Dane zbieraliśmy z trzech głównych źródeł:
+
+* **portale informacyjne** - tvpinfo.pl, wp.pl, wprost.pl, onet.pl, newsweek.pl, tvn24.pl, naTemat.pl, gazeta.pl, dziennik.pl, wyborcza.pl;
+
+* **Twitter** - tweety z oficjalnych profili kandydatow;
+
+* **Facebook** - posty publikowane na publicznych stronach kandtydatów.
+
+## <font color='darkred'>Wskaźniki</font>
+
+Na podstawie poniższych wskaźników analizowaliśmy zebrane dane:
+
+* **portale informacyjne**
+     * **candidate_fraction_info** - czestotliowść artykułóW o danym kandydacie na prezydenta względem wszystkich artykułóW zwiaznych z wyborami (dla kazdego z 10 kandydatów), wkaźnik jest wyliczany dla każdej strony: TvPInfo, Wp.Pl, Wprost.Pl, Onet.Pl, Newsweek.Pl, Tvn24.Pl, Natemat.Pl, Gazeta.Pl, Dziennik.Pl oraz Wyborcza.Pl;
+     * **candidate_general_info** - liczba artykółów, która ukazała się na temat danego kandydata dla każdej ze stron wymienionych powyżej;
+     * z **candidate_position** związane są dwa wskaźniki **position** - uwzględnia miejsce na stronie głównej portalu informacyjnego, na której ukazał się artykuł: skala od 1 do 4, 1 - główny artykuł na stronie, 2 - artykuł pod głównym artykułem, 3 - artykuły w lewej lub prawej stopce, 4 - inne miejsce na stronie, kolejny wskaźnik to **fontSize** to rozmiar czcionki tytułu artykułu. 
+
+* **Twitter**
+    * **sentyment** - określa poziom wydźwięku tweetów na temat kandydatów na prezydenta, na podstawie zbudowanych słownikow `pozytywne` i `negatywne` ocenialiśmy sentyment tychże wiadomości. Jeżeli różnica między liczbą słóW pozytywnych a liczbą słóW negatywnych w danym tweecie była równa -1, 0, 1 - taką wiadomość uznawaliśmy za neutralną, jeśli różnica była większa od 1 - tweet pozytywny, natomiast roznica mniejsza od -1 - tweet o negatywnym wydźwięku.
+    
+    * Pozostałe wskaźniki są związane z oficjalnymi profilami kandydatów na Twitterze. Badamy kolejno **liczba tweetow**, **srednio retweetow**, **suma retweetow**, **suma likeow**, **srednio likeow**
+
+* **Facebook**
+
+    * **like_w_czasie** - liczba polubień strony odnotowana każdego dnia pobierania danych. 
+Jako, że dla każdego kandydata zbierane są dane z kilku fanpejdży, dla każdego z nich zwracana jest liczba polubień. Z tym wskaźnikiem jest ściśle związany wskaźnik **like_najlepszy_wynik**, który jednoznacznie wskazuje na najwyższą liczbę polubień wybraną ze wszystkim dostępnych stron dla wybranego kandydata.
+
+    * **like_roznice_w_czasie** - przyrost liczby polubien miedzy kolejnymi dniami
+
+    * **post_ile_dziennie** - funkcja o tej nazwie zwraca **4** następujące wskaźniki: suma wszystkich postów opublikowana na każdej stronie w ciagu jednego dnia, średnia liczba polubień opublikowanych postów, średnia liczba komentarzy do postów oraz średnia liczba udostępnień tych postów;
+
+    * **wordcloud** - czestotliwość pojawiania się słów w publikowanych postach na stronach na temat kandydatów w podanym odcinku czasowym.
+
+
+## <font color='darkred'>Analiza</font>
+
+### Portale infromacyjne
+
+### Twitter
+
+Na początku sprawdźmy jak wyglądał wydźwięk tweetów publikowanych twitter.com na temat kandydatów na prezydenta.
+
+```{r, echo = FALSE, fig.width = 9, fig.height = 5, dpi=144, cache=TRUE}
+sentyment_wykres(frame_twitter, name=c("Andrzej Duda", "Bronislaw Komorowski","Andrzej Duda", "Pawel Kukiz","Janusz Korwin Mikke","Magdalena Ogorek"), begin="2015-03-15", end="2015-05-01")
+```
+
+Poniższy wykres przedstawia liczbę tweetów, które zostały opublikowane na oficjalnych stronach kandydatów na prezydenta na stronie twitter.com.
+
+```{r, echo = FALSE, fig.width = 9, fig.height = 5, dpi=144, cache=TRUE, message=FALSE, warning=FALSE}
+tweety_generuj_boxplot(frame=frame_twitter_nasluch,
+                       name=c("Bronislaw Komorowski","Andrzej Duda", "Pawel Kukiz", "Janusz Korwin Mikke"),
+                       type="liczba tweetow",begin="2015-04-01")
+```
+
+Poniżej sprawdźmy jak wyglądają `suma likeow` oraz `suma retweetow`.
+
+
+```{r, echo = FALSE, fig.width = 9, fig.height = 5, dpi=144, cache=TRUE, message=FALSE, warning=FALSE}
+
+p1 <- tweety_generuj_slupki(frame=frame_twitter_nasluch_msc,name=c("Bronislaw Komorowski","Andrzej Duda", "Pawel Kukiz", "Janusz Korwin Mikke"), type="srednio likeow", begin="2015-02-01", end="2015-05-02")
+p1
+p2 <- tweety_generuj_slupki(frame=frame_twitter_nasluch_msc,name=c("Bronislaw Komorowski","Andrzej Duda", "Pawel Kukiz", "Janusz Korwin Mikke"), type="srednio retweetow", begin="2015-02-01", end="2015-05-02")
+p2
+
+
+```
+
+### Facebook
+
+Na początku sprawdźmy, który z kandydantów odnotował największą liczbę polubień na facebook.com.
+
+```{r, echo = FALSE, fig.width = 9, fig.height = 5, dpi=144, cache=TRUE}
+
+res <- facebook_like_najlepszy_wynik(last_date, frame_likes = frame_likes, can = can)
+ggplot(res, aes(x = factor(name), y = likes)) + geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(color = "black", size = 7, face = "bold", angle = 90)) + 
+  ggtitle(paste0("Liczba polubien oficjalnych stron kandydatow na dzien ", last_date, "\n")) +
+    theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold")) +
+       labs(x="", y="Likes") 
+
+```
+
+Dokładne wyniki dla TOP5 wyglądają następująco:
+
+```{r, echo = FALSE, fig.height= 25, fig.width= 50}
+res_tmp <- res[order(res$likes, decreasing = TRUE),]
+row.names(res_tmp) <- 1:nrow(res_tmp)
+res_tmp[1:5,]
+```
+
+Następnie sprawdźmy jak zmieniała się liczba polubień oficjalnych stron kandydatów w czasie. 
+Do porównania wybraliśmy kandydatów, którzy w pierwszej turze wyborów otrzymali 5 najlepszych wyników, tj. Andrzej Duda, Bronisław Komorowski, Paweł Kukiz, Janusz Korwin Mikke oraz Magdalena Ogorek.
+
+
+```{r, echo=FALSE, fig.width = 9, fig.height = 5, dpi = 144, cache=TRUE}
+kan <- c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz", "Janusz Korwin Mikke", "Magdalena Ogorek")
+resf2 <- facebook_like_w_czasie(kan, frame_likes = frame_likes, can = can)
+
+ggplot(resf2, aes(x=data, y=likes, colour=name)) +
+  geom_line(size = 1) + theme(legend.position="bottom") + 
+  theme(axis.text.x = element_text(color = "black", size = 10, face = "bold")) + 
+  ggtitle(paste0("Liczba polubien oficjalnych stron kandydatow w czasie ", "\n")) +
+    theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold")) +
+       labs(x="", y="Likes")
+```
+
+Widać ogromną różnicę między Januszem Korwinem - Mikke a pozostałymi kandydatami, sprawdźmy jak wygląda wykres po usunięciu ze zbioru obserwacji danych dotyczących Janusza Korwina - Mikke.
+
+```{r, echo=FALSE, fig.width = 9, fig.height = 5, dpi = 144, cache=TRUE}
+
+ggplot(resf2[- which(resf2$name == "Janusz Korwin Mikke"), ], aes(x=data, y=likes, colour=name)) +
+  geom_line(size = 1) + theme(legend.position="bottom") + 
+  ggtitle(paste0("Liczba polubien oficjalnych stron kandydatow w czasie ", "\n")) +
+    theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold")) +
+       labs(x="", y="Likes")
+
+```
+
+W celu sprawdzenia tendencji w czasie dla pozostałych kandydatów możemy użyć funkcji `facebook_like_w_czasie`.
+
+```{r, echo=FALSE, fig.width = 9, fig.height = 5, dpi = 144,cache=TRUE}
+
+resf3 <- facebook_like_roznice_w_czasie(kan, frame_likes = frame_likes, can = can)
+
+ggplot(resf3, aes(x=data, y=diff_likes, colour=name)) +
+  geom_line(size = 1) + theme(legend.position="bottom") + 
+  ggtitle(paste0("Przyrost liczby polubien oficjalnych stron kandydatow w czasie ", "\n")) +
+    theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold")) +
+       labs(x="", y="Likes")
+
+```
+
+Teraz sprawdźmy jak zmieniały się w czasie wskaźniki związane z samymi artykułami, tj. liczba postów zamieszczana na stronach w ciągu jednego dnia, średnia liczba polubień zamieszczonych postów oraz średnia liczba komentarzy i udostępnień. 
+
+```{r, echo = FALSE, fig.width = 9, fig.height = 5, dpi = 144}
+resf4 <- facebook_post_ile_dziennie(c("Bronislaw Komorowski", "Andrzej Duda", "Pawel Kukiz", "Janusz Korwin Mikke"), frame_posts = frame_posts, can = can)
+```
+
+```{r, echo = FALSE, dpi = 144, fig.width = 9, fig.height = 10, dpi = 144, results='hide', cache=TRUE}
+  # wykresy 
+p1 <- ggplot(resf4, aes(x=date, y=posts_count, colour=name)) +
+      geom_line(size = 1) + theme(legend.position="bottom") + 
+      ggtitle("Liczba postow") +
+      theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold"))
+#p1
+
+p2 <- ggplot(resf4, aes(x=date, y=likes_count, colour=name)) +
+      geom_line(size = 1) + theme(legend.position="none") + 
+      ggtitle("Srednia liczba polubien postow") +
+      theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold"))
+#p2
+    p3 <- ggplot(resf4, aes(x=date, y=comments_count, colour=name)) +
+      geom_line(size = 1) + theme(legend.position="bottom") + 
+      ggtitle("Srednia liczba komentarzy") +
+      theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold"))
+#p3
+
+    p4 <- ggplot(resf4, aes(x=date, y=shares_count, colour=name)) +
+      geom_line(size = 1) + theme(legend.position="none") + 
+      ggtitle("Srednia liczba udostepnien postow") +
+      theme(plot.title = element_text(lineheight=1.2, size = 14, face="bold"))
+#p4
+
+grid.arrange(p1, p2, p3, p4, heights=c(2, 2))
+```
+
+Na koniec sprawdźmy, jakie słowa pojawiały się najczęściej w postach publikowanych na stronach kandydatów tak jak poprzednio, sprawdźmy wyniki dla Andrzeja Dudy, Bronisława Komorowskiego, Pawła Kukiza oraz Janusza Korwina-Mikke.
+
+```{r, echo = FALSE, results='hide', dpi = 144, fig.width = 9, fig.height = 5, dpi = 144, message=FALSE, cache = TRUE, warning=FALSE}
+wc1 <- facebook_wordcloud("Andrzej Duda", frame_posts = frame_posts, can = can)
+wc2 <- facebook_wordcloud("Bronislaw Komorowski", frame_posts = frame_posts, can = can)
+wc3 <- facebook_wordcloud("Pawel Kukiz", frame_posts = frame_posts, can = can)
+wc4 <- facebook_wordcloud("Janusz Korwin Mikke", frame_posts = frame_posts, can = can)
+
+
+wordcloud(names(wc1), wc1, scale=c(4,0.5), random.order=FALSE, min.freq = 1, max.words=200, 
+          colors=brewer.pal(7, "Dark2"))
+
+wordcloud(names(wc2), wc2, scale=c(8,.2),min.freq=2, max.words=200, random.order=FALSE, 
+          rot.per=.15, colors=brewer.pal(8, "Dark2"))
+
+wordcloud(names(wc3), wc3, scale=c(8,.2),min.freq=2, max.words=200, random.order=FALSE, 
+          rot.per=.15, colors=brewer.pal(6, "Dark2"))
+
+wordcloud(names(wc4), wc4, scale=c(8,.2),min.freq=2, max.words=200, random.order=FALSE, 
+          rot.per=.15, colors=brewer.pal(5, "Dark2"))
+
+```
+
+
+## <font color='darkred'>Podsumowanie</font>
+
+Dane były pobierane między **16-03-2015** a **10-05-2015**. W przeciągu tego czasu udało nam się zebrać
+
+* **3.84 MB** z portali informacyjnych
+
+* **2.16 MB** z twtiter.com
+
+* **133 MB** z facebook.com
+
+Łącznie: **139 MB**
+
+Wszystkie funkcje, które używaliśmy do tej pory zostały opakowane w pakiet `nazwa`. W sumie analizowaliśmy nasze dane na podstawie **15** wskaźników, opisanych powyżej.
+
+Ponadto wszystkie wyniki dla każdego z kandydatów można analizować dzięki stworzonej aplikacji Shiny.
