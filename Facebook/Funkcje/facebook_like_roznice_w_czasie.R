@@ -48,6 +48,8 @@ facebook_like_roznice_w_czasie <- function(names_can,
                                            from = as.Date("2015-01-01"), to = Sys.Date(),
                                            frame_likes = frame_likes, can = can){
   
+  df <- frame_likes 
+  
   kan <- stri_trans_totitle(can$names)
   id <- can$id[which(kan %in% names_can)]
   
@@ -56,7 +58,7 @@ facebook_like_roznice_w_czasie <- function(names_can,
   
   for(i in seq_along(id)){
     # dane tylko dla wybranych kandydata
-    df_new <- frame_likes[frame_likes$names == names_can[i],]
+    df_new <- df[df$names == names_can[i],]
 
     #usuwamy duplikaty
     dup1 <- which(duplicated(df_new$id.page))
@@ -77,7 +79,7 @@ facebook_like_roznice_w_czasie <- function(names_can,
     # roznicujemy
     data <- c(0, as.numeric(df_new[, 5:ncol(df_new)]) %>% diff)
     # ramka wyjsciowa
-    df_res <- data.table( id = i, name = kan[id[i]],
+    df_res <- data.table( id = which(kan == names_can[i]), name = names_can[i],
                           data = colnames(df_new)[5:ncol(df_new)] %>% as.Date(), 
                           diff_likes = data)
     # ograniczamy sie do podanego odcinka czasowego

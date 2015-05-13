@@ -107,6 +107,11 @@ oczyszczanie <- function(tresci){
 
 # Przykład dla Emilki: 
 # wc <- facebook_wordcloud("Janusz Korwin Mikke", frame_posts = frame_posts, can = can)
+# wc <- facebook_wordcloud("Bronislaw Komorowski", frame_posts = frame_posts, can = can)
+# wc <- facebook_wordcloud("Pawel Kukiz", frame_posts = frame_posts, can = can)
+# wc <- facebook_wordcloud("Magdalena Ogorek", frame_posts = frame_posts, can = can)
+# wc <- facebook_wordcloud("Andrzej Duda", frame_posts = frame_posts, can = can)
+
 # 
 #   #wordcloud
 #   wordcloud(names(top500),top500,c(8,.3),2,,FALSE,TRUE,.15,pal)
