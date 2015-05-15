@@ -14,10 +14,10 @@
 #'
 #'@details
 #' Imie i nazwisko \code{name_can} mozemy wybrac ze zbioru:
-#' "Bronislaw Komorowski", "Andrzej Duda", "Magdalena Ogorek", "Pawel Kukiz"          
-#' "Adam Jarubas", "Janusz Korwin Mikke",  "Janusz Palikot", "Marian Kowalski"      
+#' "Bronislaw Komorowski", "Andrzej Duda", "Magdalena Ogorek", "Pawel Kukiz"
+#' "Adam Jarubas", "Janusz Korwin Mikke",  "Janusz Palikot", "Marian Kowalski"
 #' "Jacek Wilk", "Grzegorz Braun", "Pawel Tanajno"
-#' 
+#'
 #' @examples
 #' sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"))
 #' sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek"), begin="2015-03-01", end="2015-05-01")
@@ -31,80 +31,80 @@
 
 
 sentyment_wykres <- function(frame, name,begin="2015-03-16", end=Sys.Date(),thickness=1){
-  
+
   #konwersja nazw
   nazwy <- c("komorowski", "duda", "korwin", "ogorek", "jarubas", "kukiz", "palikot",
              "wilk","braun", "kowalski", "tanajno")
   names(nazwy) <- c("Bronislaw Komorowski", "Andrzej Duda", "Janusz Korwin Mikke",
                     "Magdalena Ogorek", "Adam Jarubas", "Pawel Kukiz","Janusz Palikot",
                     "Jacek Wilk", "Grzegorz Braun", "Marian Kowalski", "Pawel Tanajno")
-  
-  
+
+
   ktore <- which(names(nazwy)%in%name)
   name <- nazwy[ktore]
-  
+
   n_plots <- length(name)
-  
+
   begin <- as.Date(begin)
   if(class(end)!="Date"){
     end <- as.Date(end)
   }
-  
-  
+
+
   main_title <- "Analiza sentymentu dla wybranych kandydatow"
   n_days <- as.numeric(end-begin)+1
-  
+
   #generujemy CALY przedzial czasowy
   all_dates <- character(n_days)
-  
+
   for(i in seq_along(all_dates)){
-    
+
     all_dates[i] <- as.character(begin+i-1)
   }
-  
+
   #geeruemy ramke danych z wartosciami, potrzebne jak np nei bylo ktoregos dnia info,
   #dane nie sa na tyle duze zebysmy mueisli to zapisywac do pliku a nie generowac teraz
   frame_help <- data.frame()
-  
+
   for(j in 1:n_plots){
-    
+
     y <- numeric(n_days)
-    
+
     exact_data <- frame %>%
       filter(lastname==name[j] & date %in% all_dates )
-    
+
     for(i in seq_along(all_dates)){
-      
+
       k <- which(exact_data$date==all_dates[i])
       if(length(k)>0&&!is.na(k)){
         y[i] <- exact_data[k[1],3]
-        
+
       } else y[i] <- 0
     }
-    
+
     dates_as_dates <- as.Date(all_dates)
     frame_help <- rbind(frame_help,data.frame(y, dates_as_dates,kandydat=rep(names(name)[j],length(y))))
-    
+
   }
-  
+
   if(all(is.na(frame_help$y))){
     print("Niestety w tym okresie nie mamy info o nikim")
     return(invisible(NULL))
   }
-  
-  p <- ggplot(frame_help, aes(x=dates_as_dates, y=y, colour=kandydat)) + xlab("")+
-    ylab("sentiment")+xlab("time")+scale_x_date(labels=date_format("%b-%Y"))+
+
+  p <- ggplot(frame_help, aes(x=dates_as_dates, y=y, colour=kandydat))+
+    theme(axis.title.x = element_blank())+
+    scale_x_date(labels=date_format("%b-%Y"))+
     theme(plot.title = element_text(colour = "black"))+
-    theme(axis.text=element_text(size=12),
-          axis.title=element_text(size=16,face="bold"))+
     theme(plot.title = element_text(lineheight=.8, face="bold",size=20))+
     geom_line(size=thickness)+ geom_point() +scale_fill_brewer(palette="Spectral")+
     ggtitle(main_title)+
-    theme(plot.title = element_text(lineheight=.8, face="bold"))
-    
+    theme(plot.title = element_text(lineheight=.8, face="bold"))+
+    theme(axis.title.y= element_blank())
+
   p
-  
+
 }
 
 
-sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek","Janusz Korwin Mikke","Janusz Palikot","Marian Kowalski","Adam Jarubas"), begin="2014-03-01", end="2015-05-01")
+#sentyment_wykres(read.csv2("Podsumowanie_tweetow.csv"),name=c("Bronislaw Komorowski","Andrzej Duda","Magdalena Ogorek","Janusz Korwin Mikke","Janusz Palikot","Marian Kowalski","Adam Jarubas"), begin="2014-03-01", end="2015-05-01")
